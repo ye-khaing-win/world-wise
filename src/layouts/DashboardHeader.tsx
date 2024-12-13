@@ -25,9 +25,10 @@ const DashboardHeader: FC<IDashboardHeaderProps> = (
         "transition-all duration-300 ease-in-out",
         [HEADER.HEIGHT_MOBILE],
         // DESKTOP
-        [HEADER.HEIGHT_DESKTOP],
+
         {
           [HEADER.HEIGHT_DESKTOP_OFFSET]: isOffsetTop,
+          [HEADER.HEIGHT_DESKTOP]: !isOffsetTop,
         }
       )}
     >
