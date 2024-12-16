@@ -6,6 +6,15 @@ export default {
       fontFamily: {
         sans: ['Public Sans'],
       },
+      container: {
+        center: true,
+        screens: {
+          sm: '640px',
+          md: '768px',
+          lg: '1024px',
+          xl: '1280px',
+        },
+      },
       colors: {
         grey: {
           0: '#FFFFFF',
@@ -62,5 +71,5 @@ export default {
       },
     },
   },
-  plugins: [],
+  plugins: [require('tw-elements/plugin.cjs')],
 };

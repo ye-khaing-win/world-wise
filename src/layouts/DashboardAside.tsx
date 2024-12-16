@@ -1,5 +1,4 @@
 import NavItem from '../components/layouts/Navigation/NavItem';
-import { Icon } from '@iconify/react';
 import Logo from '../components/ui/Logo';
 import Aside from '../components/layouts/Aside/Aside';
 import AsideHead from '../components/layouts/Aside/AsideHead';
@@ -8,9 +7,35 @@ import AsideBody from '../components/layouts/Aside/AsideBody';
 import classNames from 'classnames';
 import useSettings from '../hooks/useSettings';
 import NavCollapse from '../components/layouts/Navigation/NavCollapse';
+import useNavGroups, { NavGroupProps } from '../hooks/useNavGroups';
+import NavTitle from '../components/layouts/Navigation/NavTitle';
 
 const DashboardAside = () => {
   const { isAsideCollapsed } = useSettings();
+  const navGroups = useNavGroups();
+
+  const renderNavGroups = (navGroups: NavGroupProps[], depth?: number) => {
+    if (typeof depth === 'number') {
+      depth++;
+    } else {
+      depth = 1;
+    }
+
+    return navGroups.map(({ id, title, icon, type, children }) => {
+      switch (type) {
+        case 'title':
+          return <NavTitle key={id}>{title}</NavTitle>;
+        case 'collapse':
+          return (
+            <NavCollapse key={id} icon={icon!} title={title} depth={depth}>
+              {children && renderNavGroups(children, depth)}
+            </NavCollapse>
+          );
+        case 'item':
+          return <NavItem key={id} icon={icon!} title={title} depth={depth} />;
+      }
+    });
+  };
 
   return (
     <Aside>
@@ -24,26 +49,7 @@ const DashboardAside = () => {
       </AsideHead>
       <AsideBody>
         <nav>
-          <ul>
-            <NavItem
-              icon={<Icon className="h-6 w-6" icon="solar:bell-bing-bold-duotone" />}
-              title="Dashboard"
-            />
-            <NavItem
-              icon={
-                <Icon className="h-6 w-6" icon="solar:clapperboard-text-bold-duotone" />
-              }
-              title="Dashboard"
-            />
-            <NavCollapse
-              icon={
-                <Icon className="h-6 w-6" icon="solar:clapperboard-text-bold-duotone" />
-              }
-              title="Dashboard"
-            >
-              <span />
-            </NavCollapse>
-          </ul>
+          <ul>{renderNavGroups(navGroups)}</ul>
         </nav>
       </AsideBody>
     </Aside>

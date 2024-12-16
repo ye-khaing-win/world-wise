@@ -1,14 +1,15 @@
 import classNames from 'classnames';
-import { FC, ReactNode } from 'react';
+import { FC } from 'react';
 import useSettings from '../../../hooks/useSettings';
+import Iconify from '../../Iconify';
 
 interface INavIconProps {
+  icon: string;
   className?: string;
-  children?: ReactNode;
 }
 
 const NavIcon: FC<INavIconProps> = (props) => {
-  const { className, children } = props;
+  const { icon, className } = props;
 
   const { isAsideCollapsed } = useSettings();
 
@@ -22,7 +23,7 @@ const NavIcon: FC<INavIconProps> = (props) => {
         className
       )}
     >
-      {children}
+      <Iconify icon={icon} className="h-6 w-6" />
     </span>
   );
 };

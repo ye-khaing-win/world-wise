@@ -3,7 +3,6 @@ import classNames from 'classnames';
 const styles = {
   default: classNames(
     'py-1 px-3',
-    'mb-1',
     'min-h-11',
     'flex items-center justify-center',
     'grow',

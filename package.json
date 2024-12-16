@@ -13,12 +13,15 @@
     "@iconify/react": "^5.1.0",
     "autoprefixer": "^10.4.20",
     "classnames": "^2.5.1",
+    "framer-motion": "^11.14.4",
     "postcss": "^8.4.49",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-icons": "^5.4.0",
     "react-router-dom": "^7.0.2",
-    "tailwindcss": "^3.4.16"
+    "tailwindcss": "^3.4.16",
+    "tw-elements": "^2.0.0",
+    "world-wise": "file:"
   },
   "devDependencies": {
     "@eslint/js": "^9.15.0",
