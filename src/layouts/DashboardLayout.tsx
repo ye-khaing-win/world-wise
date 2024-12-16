@@ -1,5 +1,5 @@
 import { FC, ReactNode } from 'react';
-import DashboardHeader from './DashboardHeader';
+import Header from './Header';
 import Aside from './DashboardAside';
 import classNames from 'classnames';
 import useSettings from '../hooks/useSettings';
@@ -25,8 +25,8 @@ const DashboardLayout: FC<IDashboardLayoutProps> = (props) => {
           'transition-all duration-300 ease-in-out'
         )}
       >
-        <DashboardHeader>Header</DashboardHeader>
-        <main>{children}</main>
+        <Header />
+        {children}
       </div>
     </>
   );

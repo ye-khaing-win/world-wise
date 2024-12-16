@@ -17,7 +17,7 @@ const Subheader: FC<SubheaderProps> = (props) => {
         [SUB_HEADER.TOP, SUB_HEADER.HEIGHT_DESKTOP],
         // 'sticky z-10',
         'flex justify-between items-center gap-4',
-        'xs:mb-3 md:mb-5', // TODO: NEED TO CHECK
+        'xs:mb-6 md:mb-10', // TODO: NEED TO CHECK
         className
       )}
       {...rest}

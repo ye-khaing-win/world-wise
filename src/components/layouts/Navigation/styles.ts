@@ -9,8 +9,8 @@ const styles = {
     'cursor-pointer',
     'overflow-hidden',
     'rounded-lg',
-    'text-zinc-500',
-    'hover:bg-grey-500/[0.08]',
+    'text-grey-600',
+    'hover:bg-grey-600/[0.08]',
     // 'dark:hover:text-zinc-100',
     'transition-all duration-300 ease-in-out'
   ),
