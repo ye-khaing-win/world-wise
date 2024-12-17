@@ -1,26 +1,23 @@
 import classNames from 'classnames';
-import { FC, HTMLAttributes, ReactNode, useEffect, useLayoutEffect, useRef } from 'react';
+import { FC, HTMLAttributes, ReactNode } from 'react';
 
 interface TabProps extends HTMLAttributes<HTMLButtonElement> {
   children: ReactNode;
   className?: string;
   isActive?: boolean;
   value: number;
-  onSwitch?: (index: number, left: number, width: number) => void;
+  onSwitch?: (index: number) => void;
 }
 
 const Tab: FC<TabProps> = (props) => {
   const { value, children, isActive, onSwitch, className } = props;
 
-  const buttonRef = useRef<HTMLButtonElement>(null);
-
   const handleClick = () => {
-    onSwitch?.(value, buttonRef.current?.offsetLeft, buttonRef.current?.offsetWidth);
+    onSwitch?.(value);
   };
 
   return (
     <button
-      ref={buttonRef}
       onClick={handleClick}
       className={classNames(
         'min-w-12 min-h-12',

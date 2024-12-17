@@ -2,6 +2,7 @@ import Iconify from '../../../components/Iconify';
 import Container from '../../../components/layouts/Container/Container';
 import PageWrapper from '../../../components/layouts/PageWrapper/PageWrapper';
 import Subheader from '../../../components/layouts/Subheader/Subheader';
+import Badge from '../../../components/ui/Badge';
 import Breadcrumbs from '../../../components/ui/Breadcrumbs';
 import Button from '../../../components/ui/Button';
 import Card from '../../../components/ui/Card';
@@ -26,6 +27,9 @@ const UsersListPage = () => {
             {tabs.map((tab, index) => (
               <Tab value={index} key={index}>
                 {tab}
+                <Badge color="primary" className="ml-2">
+                  20
+                </Badge>
               </Tab>
             ))}
           </Tabs>
