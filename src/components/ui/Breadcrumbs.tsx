@@ -17,7 +17,7 @@ const Breadcrumbs: FC<BreadcrumbsProps> = (props) => {
         {paths.map((path, index) => (
           <>
             {index !== 0 && (
-              <li className="flex items-center">
+              <li key={`sept_${path}`} className="flex items-center">
                 {separator ? (
                   separator
                 ) : (
@@ -25,7 +25,7 @@ const Breadcrumbs: FC<BreadcrumbsProps> = (props) => {
                 )}
               </li>
             )}
-            <li className="text-sm">
+            <li key={path} className="text-sm">
               {index === paths.length - 1 ? (
                 <span className="text-grey-500">{capitalize(path)}</span>
               ) : (

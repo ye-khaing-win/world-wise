@@ -24,7 +24,9 @@ const UsersListPage = () => {
         <Card>
           <Tabs>
             {tabs.map((tab, index) => (
-              <Tab key={index}>{tab}</Tab>
+              <Tab value={index} key={index}>
+                {tab}
+              </Tab>
             ))}
           </Tabs>
           <div className="h-[20rem]" />
