@@ -10,6 +10,9 @@ import Card from '../../../components/ui/Card';
 import Tab from '../../../components/ui/Tabs/Tab';
 import Tabs from '../../../components/ui/Tabs/Tabs';
 import { TColor } from '../../../types/color';
+import Input from '../../../components/form/Input';
+import FieldWrapper from '../../../components/form/FieldWrapper';
+import Label from '../../../components/form/Label';
 
 type TTab = {
   value: number;
@@ -79,10 +82,21 @@ const UsersListPage = () => {
           {/* TABLE TOOLBAR */}
           <div
             className={classNames(
-              'flex md:items-center xs:items-end md:flex-row xs:flex-col',
+              'flex md:items-center xs:items-end md:flex-row xs:flex-col gap-4',
               'p-5 md:pr-2 xs:pr-5'
             )}
-          ></div>
+          >
+            <FieldWrapper className="flex items-center justify-center">
+              <Input placeholder="First name" />
+
+              <Label>First Name</Label>
+            </FieldWrapper>
+
+            <FieldWrapper>
+              <Input placeholder="Last Name" />
+              <Label>Last Name</Label>
+            </FieldWrapper>
+          </div>
 
           <div className="h-[20rem]" />
         </Card>
