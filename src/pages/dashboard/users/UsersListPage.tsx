@@ -11,8 +11,9 @@ import Tab from '../../../components/ui/Tabs/Tab';
 import Tabs from '../../../components/ui/Tabs/Tabs';
 import { TColor } from '../../../types/color';
 import Input from '../../../components/form/Input';
-import FieldWrapper from '../../../components/form/FieldWrapper';
+import FieldWrapper from '../../../components/form/FieldWrap';
 import Label from '../../../components/form/Label';
+import Select from '../../../components/form/Select';
 
 type TTab = {
   value: number;
@@ -86,14 +87,14 @@ const UsersListPage = () => {
               'p-5 md:pr-2 xs:pr-5'
             )}
           >
-            <FieldWrapper className="flex items-center justify-center">
-              <Input label="First" placeholder="First name" />
-              <Label>First Name</Label>
-            </FieldWrapper>
+            {/* <FieldWrapper className="flex items-center justify-center">
+              <Input />
+              <Label variant="shrink">First Name</Label>
+            </FieldWrapper> */}
 
             <FieldWrapper>
-              {/* <Label>Last Name</Label> */}
-              <Input label="Last Name" placeholder="Last Name" />
+              <Label variant="shrink">Role</Label>
+              <Select></Select>
             </FieldWrapper>
           </div>
 

@@ -1,19 +1,19 @@
 import classNames from 'classnames';
 import { FC, HTMLAttributes, ReactNode } from 'react';
 
-interface FieldWrapperProps extends HTMLAttributes<HTMLDivElement> {
+interface FieldWrapProps extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
   className?: string;
 }
 
-const FieldWrapper: FC<FieldWrapperProps> = (props) => {
+const FieldWrap: FC<FieldWrapProps> = (props) => {
   const { children, className, ...rest } = props;
 
   return (
-    <div className={classNames('group relative', className)} {...rest}>
+    <div className={classNames('group/field-wrap relative', className)} {...rest}>
       {children}
     </div>
   );
 };
 
-export default FieldWrapper;
+export default FieldWrap;

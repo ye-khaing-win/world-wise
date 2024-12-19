@@ -80,6 +80,7 @@ export default {
       boxShadow: {
         card: 'rgba(145, 158, 171, 0.24) 0px 0px 2px 0px, rgba(145, 158, 171, 0.1) 0px 12px 24px -4px',
         tabs: 'inset 0 -2px 0 0 rgba(145, 158, 171, 0.08)',
+        menu: '0 0 2px 0 rgba(145, 158, 171, 0.24), -20px 20px 40px -4px rgba(145, 158, 171, 0.24)',
       },
     },
   },
