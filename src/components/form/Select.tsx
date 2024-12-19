@@ -1,6 +1,14 @@
 import classNames from 'classnames';
-import { Children, forwardRef, InputHTMLAttributes, ReactNode } from 'react';
+import {
+  Children,
+  forwardRef,
+  InputHTMLAttributes,
+  ReactNode,
+  useRef,
+  useState,
+} from 'react';
 import Iconify from '../Iconify';
+import Modal from '../ui/Modal/Modal';
 
 type SelectVariant = 'outlined';
 type SelectDimension = 'default';
@@ -18,10 +26,25 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>((props) => {
     variant = 'outlined',
     dimension = 'default',
     fullWidth = true,
-    children,
+    // children,
     className,
     ...rest
   } = props;
+
+  const [open, setOpen] = useState<boolean>(false);
+  const [left, setLeft] = useState<number>(0);
+  const [top, setTop] = useState<number>(0);
+
+  const divRef = useRef<HTMLDivElement>(null);
+
+  const handleOpen = () => {
+    console.log(divRef.current?.getBoundingClientRect());
+
+    setLeft(divRef.current?.getBoundingClientRect().left || 0);
+    setTop(divRef.current?.getBoundingClientRect().top || 0);
+
+    setOpen(true);
+  };
 
   const selectVariant: {
     [key in SelectVariant]: { general: string; validation: string };
@@ -56,9 +79,11 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>((props) => {
   return (
     <>
       <div
+        ref={divRef}
         className={classNames('relative', {
           'w-full': fullWidth,
         })}
+        onClick={handleOpen}
       >
         <input className={styles} {...rest} />
 
@@ -71,14 +96,30 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>((props) => {
           )}
         />
       </div>
-      <div className={classNames('p-4 shadow-menu min-w-52 rounded-lg')}>
-        <ul>
-          <li>Admin</li>
-          <li>Developer</li>
-          <li>Supervisor</li>
-          <li>User</li>
-        </ul>
-      </div>
+      {open && (
+        <Modal invisible onClick={() => setOpen(false)}>
+          <div
+            className={classNames(
+              'absolute',
+              'p-4',
+              'shadow-menu',
+              'min-w-52 max-h-60',
+              'rounded-lg'
+            )}
+            style={{
+              top: top + 61,
+              left: left - 4,
+            }}
+          >
+            <ul>
+              <li>Admin</li>
+              <li>Develope____________________________</li>
+              <li>Supervisor</li>
+              <li>User</li>
+            </ul>
+          </div>
+        </Modal>
+      )}
     </>
   );
 });
