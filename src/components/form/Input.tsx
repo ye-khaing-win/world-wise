@@ -10,13 +10,14 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   className?: string;
   dimension?: InputDimension;
   fullWidth?: boolean;
+  label?: string;
 }
 
 const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   const {
     variant = 'outlined',
     dimension = 'default',
-    fullWidth,
+    label,
     className,
     ...rest
   } = props;
@@ -30,7 +31,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
         'border border-grey-500/20',
         'rounded-lg',
         'group-hover:border-grey-800/80',
-        'peer-focus:border-grey-800 peer-focus:border-2'
+        'group-has-[:focus]:border-grey-800 group-has-[:focus]:border-2'
       ),
       validation: classNames(),
     },
@@ -44,7 +45,8 @@ const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   const inputSizeStyles = inputDimension[dimension];
 
   const styles = classNames(
-    'bg-transparent relative z-40',
+    'h-14',
+    'bg-transparent relative z-30',
     'outline-none',
     'text-sm text-current',
     'placeholder-transparent',
@@ -54,9 +56,9 @@ const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   );
 
   return (
-    <div className="peer">
+    <div>
       <input ref={ref} className={styles} {...rest} {...rest} />
-      <div className={classNames(inputVariantStyles, 'absolute top-0 left-0')}></div>
+      <div className={classNames(inputVariantStyles, 'absolute top-0 left-0')} />
     </div>
   );
 });

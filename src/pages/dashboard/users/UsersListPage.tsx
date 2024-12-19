@@ -87,14 +87,13 @@ const UsersListPage = () => {
             )}
           >
             <FieldWrapper className="flex items-center justify-center">
-              <Input placeholder="First name" />
-
+              <Input label="First" placeholder="First name" />
               <Label>First Name</Label>
             </FieldWrapper>
 
             <FieldWrapper>
-              <Input placeholder="Last Name" />
-              <Label>Last Name</Label>
+              {/* <Label>Last Name</Label> */}
+              <Input label="Last Name" placeholder="Last Name" />
             </FieldWrapper>
           </div>
 

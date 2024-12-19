@@ -10,7 +10,7 @@ const FieldWrapper: FC<FieldWrapperProps> = (props) => {
   const { children, className, ...rest } = props;
 
   return (
-    <div className={classNames('relative group', className)} {...rest}>
+    <div className={classNames('group relative', className)} {...rest}>
       {children}
     </div>
   );
