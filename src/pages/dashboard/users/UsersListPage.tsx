@@ -14,6 +14,8 @@ import Input from '../../../components/form/Input';
 import FieldWrapper from '../../../components/form/FieldWrap';
 import Label from '../../../components/form/Label';
 import Select from '../../../components/form/Select';
+import Menu from '../../../components/ui/Menu/Menu';
+import MenuItem from '../../../components/ui/Menu/MenuItem';
 
 type TTab = {
   value: number;
@@ -65,7 +67,9 @@ const UsersListPage = () => {
             <h4 className="font-bold text-2xl mb-2 leading-9">List</h4>
             <Breadcrumbs paths={['users', 'list']} />
           </div>
-          <Button startIcon={<Iconify icon="mingcute:add-line" />}>New Invoice</Button>
+          <Button startIcon={<Iconify icon="mingcute:add-line" />}>
+            New Invoice
+          </Button>
         </Subheader>
         <Card>
           {/* TABS */}
@@ -87,14 +91,24 @@ const UsersListPage = () => {
               'p-5 md:pr-2 xs:pr-5'
             )}
           >
-            {/* <FieldWrapper className="flex items-center justify-center">
+            <FieldWrapper className="flex items-center justify-center">
               <Input />
               <Label variant="shrink">First Name</Label>
-            </FieldWrapper> */}
+            </FieldWrapper>
 
             <FieldWrapper>
               <Label variant="shrink">Role</Label>
-              <Select></Select>
+              <Select>
+                <Menu>
+                  <MenuItem>
+                    <input type="checkbox" />
+                    Admin
+                  </MenuItem>
+                  <MenuItem>Superuser</MenuItem>
+                  <MenuItem>Developer</MenuItem>
+                  <MenuItem>Tester</MenuItem>
+                </Menu>
+              </Select>
             </FieldWrapper>
           </div>
 

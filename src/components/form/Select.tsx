@@ -1,9 +1,9 @@
 import classNames from 'classnames';
 import {
-  Children,
+  cloneElement,
   forwardRef,
   InputHTMLAttributes,
-  ReactNode,
+  ReactElement,
   useRef,
   useState,
 } from 'react';
@@ -14,11 +14,11 @@ type SelectVariant = 'outlined';
 type SelectDimension = 'default';
 
 interface SelectProps extends InputHTMLAttributes<HTMLInputElement> {
-  children: ReactNode;
+  children: ReactElement;
   className?: string;
-  variant: SelectVariant;
-  dimension: SelectDimension;
-  fullWidth: boolean;
+  variant?: SelectVariant;
+  dimension?: SelectDimension;
+  fullWidth?: boolean;
 }
 
 const Select = forwardRef<HTMLSelectElement, SelectProps>((props) => {
@@ -26,22 +26,18 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>((props) => {
     variant = 'outlined',
     dimension = 'default',
     fullWidth = true,
-    // children,
+    children,
     className,
     ...rest
   } = props;
 
   const [open, setOpen] = useState<boolean>(false);
-  const [left, setLeft] = useState<number>(0);
-  const [top, setTop] = useState<number>(0);
+  const [domRect, setDomRect] = useState<DOMRect | null>(null);
 
   const divRef = useRef<HTMLDivElement>(null);
 
   const handleOpen = () => {
-    console.log(divRef.current?.getBoundingClientRect());
-
-    setLeft(divRef.current?.getBoundingClientRect().left || 0);
-    setTop(divRef.current?.getBoundingClientRect().top || 0);
+    setDomRect(divRef?.current && divRef.current.getBoundingClientRect());
 
     setOpen(true);
   };
@@ -52,7 +48,8 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>((props) => {
     outlined: {
       general: classNames(
         'outline outline-1 outline-grey-500/20',
-        'group-focus-within/field-wrap:outline-2 group-focus-within/field-wrap:outline-grey-800'
+        'group-focus-within/field-wrap:outline-2 group-focus-within/field-wrap:outline-grey-800',
+        { 'outline-2 outline-grey-800': open }
       ),
       validation: classNames(),
     },
@@ -85,7 +82,7 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>((props) => {
         })}
         onClick={handleOpen}
       >
-        <input className={styles} {...rest} />
+        <input className={styles} {...rest} readOnly />
 
         <Iconify
           width={18}
@@ -96,30 +93,23 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>((props) => {
           )}
         />
       </div>
-      {open && (
-        <Modal invisible onClick={() => setOpen(false)}>
-          <div
-            className={classNames(
-              'absolute',
-              'p-4',
-              'shadow-menu',
-              'min-w-52 max-h-60',
-              'rounded-lg'
-            )}
-            style={{
-              top: top + 61,
-              left: left - 4,
-            }}
-          >
-            <ul>
-              <li>Admin</li>
-              <li>Develope____________________________</li>
-              <li>Supervisor</li>
-              <li>User</li>
-            </ul>
-          </div>
-        </Modal>
-      )}
+
+      <Modal
+        invisible
+        open={open}
+        onClose={() => {
+          setOpen(false);
+        }}
+      >
+        {cloneElement(children, {
+          className: 'text-grey-800 z-[120]',
+          style: {
+            top: domRect?.top ? domRect.top + 61 : 0,
+            left: domRect?.left ? domRect.left : 0,
+            minWidth: domRect?.width ? domRect.width : 0,
+          },
+        })}
+      </Modal>
     </>
   );
 });
