@@ -13,9 +13,38 @@ import { TColor } from '../../../types/color';
 import Input from '../../../components/form/Input';
 import FieldWrapper from '../../../components/form/FieldWrap';
 import Label from '../../../components/form/Label';
-import Select from '../../../components/form/Select';
+import Select, { SelectChangeEvent } from '../../../components/form/Select';
 import Menu from '../../../components/ui/Menu/Menu';
 import MenuItem from '../../../components/ui/Menu/MenuItem';
+import Checkbox from '../../../components/form/Checkbox';
+import { ChangeEvent, useState } from 'react';
+
+const roles = [
+  'HR Manager',
+  'Data Analyst',
+  'Legal Counsel',
+  'UX/UI Designer',
+  'Project Manager',
+  'Account Manager',
+  'Registered Nurse',
+  'Business Analyst',
+  'Creative Director',
+  'Financial Planner',
+  'Event Coordinator',
+  'Marketing Director',
+  'Software Developer',
+  'Research Scientist',
+  'Content Strategist',
+  'Operations Manager',
+  'Sales Representative',
+  'Supply Chain Analyst',
+  'Operations Coordinator',
+  'Customer Service Associate',
+  'Quality Assurance Specialist',
+  'CEO',
+  'CFO',
+  'CTO',
+];
 
 type TTab = {
   value: number;
@@ -58,6 +87,19 @@ const TABS: TTab[] = [
 ];
 
 const UsersListPage = () => {
+  const [roles, setRoles] = useState<string[]>([]);
+
+  const handleSelectRoles = (e: SelectChangeEvent<string[]>) => {
+    const value = e.target.value;
+
+    console.log(value);
+
+    // setRoles(typeof value === 'string' ? value.split(',') : value);
+    setRoles(typeof value === 'string' ? value.split(',') : value);
+
+    // console.log(roles)
+  };
+
   return (
     <PageWrapper name="Users">
       <Container>
@@ -98,16 +140,36 @@ const UsersListPage = () => {
 
             <FieldWrapper>
               <Label variant="shrink">Role</Label>
-              <Select>
-                <Menu>
-                  <MenuItem>
-                    <input type="checkbox" />
-                    Admin
-                  </MenuItem>
-                  <MenuItem>Superuser</MenuItem>
-                  <MenuItem>Developer</MenuItem>
-                  <MenuItem>Tester</MenuItem>
-                </Menu>
+              <Select
+                multiple
+                value={roles}
+                renderedValue={(value) => value.join(', ')}
+                onChange={handleSelectRoles}
+              >
+                {/* <Menu> */}
+                <MenuItem value="Admin">
+                  <Checkbox id="admin" checked={roles.includes('Admin')} />
+                  Admin
+                </MenuItem>
+                <MenuItem value="Superuser">
+                  <Checkbox
+                    id="superuser"
+                    checked={roles.includes('Superuser')}
+                  />
+                  Superuser
+                </MenuItem>
+                <MenuItem value="Developer">
+                  <Checkbox
+                    id="developer"
+                    checked={roles.includes('Developer')}
+                  />
+                  Developer
+                </MenuItem>
+                <MenuItem value="Tester">
+                  <Checkbox id="tester" checked={roles.includes('Tester')} />
+                  Tester
+                </MenuItem>
+                {/* </Menu> */}
               </Select>
             </FieldWrapper>
           </div>

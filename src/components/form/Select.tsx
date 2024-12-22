@@ -2,32 +2,48 @@ import classNames from 'classnames';
 import {
   cloneElement,
   forwardRef,
-  InputHTMLAttributes,
   ReactElement,
   useRef,
   useState,
+  MouseEvent,
+  ReactNode,
+  Children,
+  ChangeEvent,
 } from 'react';
 import Iconify from '../Iconify';
 import Modal from '../ui/Modal/Modal';
+import Menu from '../ui/Menu/Menu';
 
 type SelectVariant = 'outlined';
 type SelectDimension = 'default';
 
-interface SelectProps extends InputHTMLAttributes<HTMLInputElement> {
-  children: ReactElement;
+export type SelectChangeEvent<T = string> =
+  | (Event & { target: { value: T; name: string } })
+  | React.ChangeEvent<HTMLInputElement>;
+
+interface SelectProps {
+  multiple?: boolean;
+  value: string[];
+  renderedValue?: (value: string[]) => string;
+  children: ReactElement[];
   className?: string;
   variant?: SelectVariant;
   dimension?: SelectDimension;
   fullWidth?: boolean;
+  onChange?: (e: SelectChangeEvent, child?: ReactNode) => void;
 }
 
-const Select = forwardRef<HTMLSelectElement, SelectProps>((props) => {
+const Select = forwardRef<HTMLInputElement, SelectProps>((props, ref) => {
   const {
+    value,
+    renderedValue,
+    multiple,
     variant = 'outlined',
     dimension = 'default',
     fullWidth = true,
     children,
     className,
+    onChange,
     ...rest
   } = props;
 
@@ -42,14 +58,69 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>((props) => {
     setOpen(true);
   };
 
+  // const childrenArray = Children.toArray(children) as ReactElement[];
+
+  // const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+  //   const child = childrenArray.find((c) => c.props.value === e.target.value);
+
+  //   if (!child) {
+  //     return;
+  //   }
+
+  //   if (onChange) {
+  //     onChange(e, child);
+  //   }
+  // };
+
+  const handleItemClick = (child: ReactElement) => {
+    return (e: MouseEvent<HTMLLIElement>) => {
+      let newValue: string | string[];
+
+      if (multiple) {
+        newValue = Array.isArray(value) ? value.slice() : [];
+        const itemIndex = value.indexOf(child.props.value);
+
+        if (itemIndex === -1) {
+          newValue.push(child.props.value);
+        } else {
+          newValue.splice(itemIndex, 1);
+        }
+      } else {
+        newValue = child.props.value;
+      }
+
+      // if (child.props.onClick) {
+      //   child.props.onClick(e);
+      // }
+
+      if (value !== newValue) {
+        // setValueState(newValue);
+        if (onChange) {
+          const nativeEvent = e.nativeEvent || e;
+          const clonedEvent = new nativeEvent.constructor(
+            nativeEvent.type,
+            nativeEvent
+          );
+          Object.defineProperty(clonedEvent, 'target', {
+            writable: true,
+            value: {
+              value: newValue,
+            },
+          });
+          onChange(clonedEvent, child);
+        }
+      }
+    };
+  };
+
   const selectVariant: {
     [key in SelectVariant]: { general: string; validation: string };
   } = {
     outlined: {
       general: classNames(
         'outline outline-1 outline-grey-500/20',
-        'group-focus-within/field-wrap:outline-2 group-focus-within/field-wrap:outline-grey-800',
-        { 'outline-2 outline-grey-800': open }
+        'group-focus-within/field-wrap:outline-2 group-focus-within/field-wrap:outline-grey-800'
+        // { 'outline-2 outline-grey-800': open }
       ),
       validation: classNames(),
     },
@@ -82,7 +153,15 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>((props) => {
         })}
         onClick={handleOpen}
       >
-        <input className={styles} {...rest} readOnly />
+        <input
+          ref={ref}
+          className={styles}
+          value={renderedValue?.(value)}
+          {...rest}
+          readOnly
+          // onChange={(e, child) => {}}
+          // onChange={handleChange}
+        />
 
         <Iconify
           width={18}
@@ -92,24 +171,37 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>((props) => {
             ' -translate-y-[50%]'
           )}
         />
-      </div>
+        <Modal
+          invisible
+          open={open}
+          onClose={() => {
+            setOpen(false);
+          }}
+        >
+          <Menu
+            className={classNames('')}
+            style={{
+              top: domRect?.top ? domRect.top + 61 : 0,
+              left: domRect?.left ? domRect.left : 0,
+              minWidth: domRect?.width ? domRect.width : 0,
+            }}
+            onMouseDown={(e: MouseEvent<HTMLElement>) => {
+              e.preventDefault();
+            }}
+          >
+            {Children.map(children, (child) => {
+              const { value: itemValue } = child.props;
 
-      <Modal
-        invisible
-        open={open}
-        onClose={() => {
-          setOpen(false);
-        }}
-      >
-        {cloneElement(children, {
-          className: 'text-grey-800 z-[120]',
-          style: {
-            top: domRect?.top ? domRect.top + 61 : 0,
-            left: domRect?.left ? domRect.left : 0,
-            minWidth: domRect?.width ? domRect.width : 0,
-          },
-        })}
-      </Modal>
+              return cloneElement(child, {
+                selected: value.includes(itemValue),
+                role: 'option',
+                'data-value': itemValue,
+                onClick: handleItemClick(child),
+              });
+            })}
+          </Menu>
+        </Modal>
+      </div>
     </>
   );
 });

@@ -19,7 +19,6 @@ const Modal: FC<ModalProps> = (props) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handler = (e: { target: any }) => {
       if (ref.current && !ref.current.contains(e.target)) {
-        console.log('here');
         onClose?.();
       }
     };
@@ -42,7 +41,9 @@ const Modal: FC<ModalProps> = (props) => {
             )}
             {...rest}
           >
-            <div ref={ref}>{children}</div>
+            <div tabIndex={-1} ref={ref}>
+              {children}
+            </div>
           </div>
           <Backdrop invisible={invisible} />
         </>

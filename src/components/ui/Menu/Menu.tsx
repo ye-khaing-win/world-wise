@@ -11,6 +11,7 @@ const Menu: FC<MenuProps> = (props) => {
 
   return (
     <div
+      tabIndex={-1}
       className={classNames(
         'absolute',
         'p-1',
@@ -22,7 +23,9 @@ const Menu: FC<MenuProps> = (props) => {
       )}
       {...rest}
     >
-      <ul className="list-none">{children}</ul>
+      <ul tabIndex={-1} className="list-none">
+        {children}
+      </ul>
     </div>
   );
 };

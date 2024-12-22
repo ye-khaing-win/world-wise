@@ -24,6 +24,7 @@ const Label: FC<LabelProps> = (props) => {
   const labelVariantStyles = labelVariant[variant];
 
   const styles = classNames(
+    'cursor-pointer',
     'bg-white',
     'px-2',
     'z-10',
