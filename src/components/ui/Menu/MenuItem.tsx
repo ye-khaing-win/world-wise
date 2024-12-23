@@ -1,11 +1,11 @@
 import classNames from 'classnames';
 import { FC, HTMLAttributes, ReactNode } from 'react';
 
-interface MenuItemProps extends HTMLAttributes<HTMLLIElement> {
+export interface MenuItemProps extends HTMLAttributes<HTMLLIElement> {
   children: ReactNode;
   className?: string;
   selected?: boolean;
-  value?: string;
+  value?: string | number;
 }
 
 const MenuItem: FC<MenuItemProps> = (props) => {

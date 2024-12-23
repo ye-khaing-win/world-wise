@@ -11,39 +11,39 @@ import Tab from '../../../components/ui/Tabs/Tab';
 import Tabs from '../../../components/ui/Tabs/Tabs';
 import { TColor } from '../../../types/color';
 import Input from '../../../components/form/Input';
-import FieldWrapper from '../../../components/form/FieldWrap';
+import FieldWrap from '../../../components/form/FieldWrap';
 import Label from '../../../components/form/Label';
-import Select, { SelectChangeEvent } from '../../../components/form/Select';
-import Menu from '../../../components/ui/Menu/Menu';
+import Select, { SelectChangeEvent } from '../../../components/form/Select_';
 import MenuItem from '../../../components/ui/Menu/MenuItem';
 import Checkbox from '../../../components/form/Checkbox';
-import { ChangeEvent, useState } from 'react';
+import { useState } from 'react';
+import SelectTest from '../../../components/form/Select';
 
-const roles = [
-  'HR Manager',
-  'Data Analyst',
-  'Legal Counsel',
-  'UX/UI Designer',
-  'Project Manager',
-  'Account Manager',
-  'Registered Nurse',
-  'Business Analyst',
-  'Creative Director',
-  'Financial Planner',
-  'Event Coordinator',
-  'Marketing Director',
-  'Software Developer',
-  'Research Scientist',
-  'Content Strategist',
-  'Operations Manager',
-  'Sales Representative',
-  'Supply Chain Analyst',
-  'Operations Coordinator',
-  'Customer Service Associate',
-  'Quality Assurance Specialist',
-  'CEO',
-  'CFO',
-  'CTO',
+const roles_ = [
+  {
+    label: 'Admin',
+    value: 'admin',
+  },
+  {
+    label: 'Superuser',
+    value: 'superuser',
+  },
+  {
+    label: 'Manager',
+    value: 'manager',
+  },
+  {
+    label: 'Developer',
+    value: 'developer',
+  },
+  {
+    label: 'Tester',
+    value: 'tester',
+  },
+  {
+    label: 'Project Manager',
+    value: 'product_manager',
+  },
 ];
 
 type TTab = {
@@ -86,16 +86,50 @@ const TABS: TTab[] = [
   },
 ];
 
+const countries = [
+  {
+    label: 'Myanmar',
+    value: 'myanmar',
+  },
+  {
+    label: 'China',
+    value: 'china',
+  },
+  {
+    label: 'Malaysia',
+    value: 'malaysia',
+  },
+];
+
 const UsersListPage = () => {
-  const [roles, setRoles] = useState<string[]>([]);
+  const [roles, setRoles] = useState<
+    {
+      label: string;
+      value: string;
+    }[]
+  >([]);
+
+  const [country, setCountry] = useState<{
+    label: string;
+    value: string;
+  } | null>(null);
+
+  const handleSelectCountry = (e: SelectChangeEvent) => {
+    const value = e.target.value;
+
+    setCountry(countries.find((c) => c.value === value)!);
+  };
 
   const handleSelectRoles = (e: SelectChangeEvent<string[]>) => {
     const value = e.target.value;
 
-    console.log(value);
+    // if (!value) return;
+    if (!Array.isArray(value)) return;
+
+    setRoles(value.map((val) => roles_.find((role) => role.value === val)!));
 
     // setRoles(typeof value === 'string' ? value.split(',') : value);
-    setRoles(typeof value === 'string' ? value.split(',') : value);
+    // setRoles(typeof value === 'string' ? value.split(',') : value);
 
     // console.log(roles)
   };
@@ -133,45 +167,40 @@ const UsersListPage = () => {
               'p-5 md:pr-2 xs:pr-5'
             )}
           >
-            <FieldWrapper className="flex items-center justify-center">
-              <Input />
+            <FieldWrap className="flex items-center justify-center">
               <Label variant="shrink">First Name</Label>
-            </FieldWrapper>
+              <Input />
+            </FieldWrap>
 
-            <FieldWrapper>
+            <FieldWrap>
               <Label variant="shrink">Role</Label>
-              <Select
+              <SelectTest
                 multiple
-                value={roles}
-                renderedValue={(value) => value.join(', ')}
+                value={roles.map((r) => r.value)}
                 onChange={handleSelectRoles}
               >
-                {/* <Menu> */}
-                <MenuItem value="Admin">
-                  <Checkbox id="admin" checked={roles.includes('Admin')} />
-                  Admin
-                </MenuItem>
-                <MenuItem value="Superuser">
-                  <Checkbox
-                    id="superuser"
-                    checked={roles.includes('Superuser')}
-                  />
-                  Superuser
-                </MenuItem>
-                <MenuItem value="Developer">
-                  <Checkbox
-                    id="developer"
-                    checked={roles.includes('Developer')}
-                  />
-                  Developer
-                </MenuItem>
-                <MenuItem value="Tester">
-                  <Checkbox id="tester" checked={roles.includes('Tester')} />
-                  Tester
-                </MenuItem>
-                {/* </Menu> */}
-              </Select>
-            </FieldWrapper>
+                {roles_.map((role) => (
+                  <MenuItem key={role.value} value={role.value}>
+                    <Checkbox
+                      id={role.value}
+                      checked={roles.map((r) => r.value).includes(role.value)}
+                    />
+                    {role.label}
+                  </MenuItem>
+                ))}
+              </SelectTest>
+            </FieldWrap>
+
+            <FieldWrap>
+              <Label variant="shrink">City</Label>
+              <SelectTest value={country?.value} onChange={handleSelectCountry}>
+                {countries.map((country) => (
+                  <MenuItem key={country.value} value={country.value}>
+                    {country.label}
+                  </MenuItem>
+                ))}
+              </SelectTest>
+            </FieldWrap>
           </div>
 
           <div className="h-[20rem]" />
