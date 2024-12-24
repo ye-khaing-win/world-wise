@@ -16,7 +16,6 @@ interface CheckboxProps extends InputHTMLAttributes<HTMLInputElement> {
 const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>((props, ref) => {
   const {
     checked,
-    color,
     variant = 'default',
     dimension = 'default',
     className,
@@ -27,7 +26,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>((props, ref) => {
     [key in CheckboxVariant]: { general: string; validation: string };
   } = {
     default: {
-      general: classNames('checked:bg-red-400'),
+      general: classNames(''),
       validation: classNames(),
     },
   };
@@ -58,7 +57,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>((props, ref) => {
       <input
         ref={ref}
         type="checkbox"
-        // checked={checked}
+        checked={checked}
         className="appearance-none"
         {...rest}
       />

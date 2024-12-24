@@ -10,7 +10,15 @@ interface IconifyProps extends Props {
 const Iconify = forwardRef<SVGSVGElement, IconifyProps>((props, ref) => {
   const { icon, className, ...rest } = props;
 
-  return <Icon ref={ref} icon={icon} className={classNames(className)} {...rest} />;
+  return (
+    <Icon
+      width={20}
+      ref={ref}
+      icon={icon}
+      className={classNames(className)}
+      {...rest}
+    />
+  );
 });
 
 export default Iconify;

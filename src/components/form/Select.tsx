@@ -14,6 +14,7 @@ import Menu from '../ui/Menu/Menu';
 import { MenuItemProps } from '../ui/Menu/MenuItem';
 import useMenuRender from '../../hooks/useMenuRender';
 import Input from './Input';
+import InputWrap from './InputWrap';
 
 export type SelectChangeEvent<T> = Event & {
   target: { value: T };
@@ -105,26 +106,29 @@ const Select = <T,>(props: SelectProps<T>) => {
 
   return (
     <div ref={divRef} className="relative" onClick={onOpen}>
-      <Input
-        ref={ref}
-        fullWidth={fullWidth}
-        variant={variant}
-        dimension={dimension}
-        value={renderValue ? renderValue(value) : (value as string)}
-        readOnly
-        className={className}
-        {...rest}
-      />
-      <Iconify
-        width={20}
-        icon="eva:arrow-ios-downward-fill"
-        className={classNames(
-          'text-grey-600 absolute top-1/2 right-2.5',
-          '-translate-y-1/2'
-        )}
-      />
+      <InputWrap
+        lastChild={
+          <Iconify
+            width={20}
+            icon="eva:arrow-ios-downward-fill"
+            className="text-grey-600"
+          />
+        }
+      >
+        <Input
+          ref={ref}
+          fullWidth={fullWidth}
+          variant={variant}
+          dimension={dimension}
+          value={renderValue ? renderValue(value) : (value as string)}
+          readOnly
+          className={classNames('pr-8 z-0', className)}
+          {...rest}
+        />
+      </InputWrap>
       <Modal invisible open={open} onClose={onClose}>
         <Menu
+          className="overflow-y-scroll max-h-[14rem] no-scrollbar"
           style={{
             top: domRect?.top ? domRect.top + 61 : 0,
             left: domRect?.left ? domRect.left : 0,

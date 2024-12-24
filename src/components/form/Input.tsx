@@ -34,7 +34,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   };
 
   const inputDimension: { [key in InputDimension]: string } = {
-    default: classNames('h-14', 'p-4 pr-8', 'text-sm'),
+    default: classNames('h-14', 'py-4 px-[14px]', 'text-sm'),
   };
 
   const inputVariantStyles = inputVariant[variant].general;
@@ -44,6 +44,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     'border-none',
     'rounded-lg',
     'text-grey-800',
+    'text-ellipsis',
     {
       'w-full': fullWidth,
     },

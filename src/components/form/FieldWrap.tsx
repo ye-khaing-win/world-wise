@@ -10,7 +10,10 @@ const FieldWrap: FC<FieldWrapProps> = (props) => {
   const { children, className, ...rest } = props;
 
   return (
-    <div className={classNames('group/field-wrap relative', className)} {...rest}>
+    <div
+      className={classNames('group/field-wrap relative', className)}
+      {...rest}
+    >
       {children}
     </div>
   );

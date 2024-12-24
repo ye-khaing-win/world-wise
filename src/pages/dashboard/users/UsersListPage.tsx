@@ -17,8 +17,11 @@ import Label from '../../../components/form/Label';
 import MenuItem from '../../../components/ui/Menu/MenuItem';
 import Checkbox from '../../../components/form/Checkbox';
 import { useState } from 'react';
-import SelectTest, { SelectChangeEvent } from '../../../components/form/Select';
-import capitalize from '../../../utils/capitalize';
+import Select, { SelectChangeEvent } from '../../../components/form/Select';
+import InputWrap from '../../../components/form/InputWrap';
+import IconButton from '../../../components/ui/IconButton';
+import usePopover from '../../../components/ui/Popover/usePopover';
+import Popover from '../../../components/ui/Popover/Popover';
 
 const dummyRoles = [
   {
@@ -44,21 +47,6 @@ const dummyRoles = [
   {
     label: 'Project Manager',
     value: 'product_manager',
-  },
-];
-
-const dummyCountries = [
-  {
-    label: 'Myanmar',
-    value: 'myanmar',
-  },
-  {
-    label: 'China',
-    value: 'china',
-  },
-  {
-    label: 'Malaysia',
-    value: 'malaysia',
   },
 ];
 
@@ -104,12 +92,7 @@ const TABS: TTab[] = [
 
 const UsersListPage = () => {
   const [roles, setRoles] = useState<string[]>([]);
-  const [country, setCountry] = useState<string>('');
-
-  const handleSelectCountry = (e: SelectChangeEvent<string>) => {
-    const value = e.target.value;
-    setCountry(value as string);
-  };
+  const popover = usePopover();
 
   const handleSelectRoles = (e: SelectChangeEvent<string[]>) => {
     const value = e.target.value;
@@ -150,14 +133,9 @@ const UsersListPage = () => {
               'p-5 md:pr-2 xs:pr-5'
             )}
           >
-            <FieldWrap className="flex items-center justify-center">
-              <Label variant="shrink">First Name</Label>
-              <Input />
-            </FieldWrap>
-
-            <FieldWrap>
+            <FieldWrap className="md:w-[200px] xs:w-full">
               <Label variant="shrink">Role</Label>
-              <SelectTest
+              <Select
                 value={roles}
                 onChange={handleSelectRoles}
                 renderValue={(values) =>
@@ -177,24 +155,33 @@ const UsersListPage = () => {
                     {role.label}
                   </MenuItem>
                 ))}
-              </SelectTest>
+              </Select>
             </FieldWrap>
-
-            <FieldWrap>
-              <Label variant="shrink">City</Label>
-              <SelectTest
-                value={country}
-                onChange={handleSelectCountry}
-                renderValue={(val) => capitalize(val)}
-              >
-                {dummyCountries.map((country) => (
-                  <MenuItem key={country.value} value={country.value}>
-                    {country.label}
-                  </MenuItem>
-                ))}
-              </SelectTest>
-            </FieldWrap>
+            <div className="flex items-center gap-4 grow">
+              <FieldWrap className="w-full">
+                <InputWrap
+                  firstChild={
+                    <Iconify icon="eva:search-fill" className="text-grey-600" />
+                  }
+                >
+                  <Input placeholder="Search..." />
+                </InputWrap>
+              </FieldWrap>
+              <IconButton onClick={popover.onOpen}>
+                <Iconify
+                  icon="eva:more-vertical-fill"
+                  className="text-grey-600"
+                />
+              </IconButton>
+            </div>
           </div>
+          <Popover
+            open={Boolean(popover.anchorEl)}
+            anchorEl={popover.anchorEl!}
+            onClose={popover.onClose}
+          >
+            <MenuItem>A</MenuItem>
+          </Popover>
 
           <div className="h-[20rem]" />
         </Card>
