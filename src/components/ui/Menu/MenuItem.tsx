@@ -6,6 +6,7 @@ export interface MenuItemProps extends HTMLAttributes<HTMLLIElement> {
   className?: string;
   selected?: boolean;
   value?: string | number;
+  label?: string;
 }
 
 const MenuItem: FC<MenuItemProps> = (props) => {

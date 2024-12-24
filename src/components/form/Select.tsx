@@ -1,9 +1,10 @@
 import {
   Children,
   cloneElement,
-  forwardRef,
   MouseEvent,
   ReactElement,
+  RefObject,
+  // ReactNode,
   useRef,
 } from 'react';
 import Iconify from '../Iconify';
@@ -12,25 +13,33 @@ import Modal from '../ui/Modal/Modal';
 import Menu from '../ui/Menu/Menu';
 import { MenuItemProps } from '../ui/Menu/MenuItem';
 import useMenuRender from '../../hooks/useMenuRender';
-import { SelectChangeEvent, SelectDimension, SelectVariant } from './types';
-import { selectDefaultStyles, selectDimension, selectVariant } from './styles';
+import Input from './Input';
 
-interface SelectProps {
-  multiple?: boolean;
+export type SelectChangeEvent<T> = Event & {
+  target: { value: T };
+};
+// | React.ChangeEvent<HTMLInputElement>;
+
+type SelectVariant = 'outlined';
+type SelectDimension = 'default';
+
+interface SelectProps<T> {
+  ref?: RefObject<HTMLInputElement>;
   fullWidth?: boolean;
-  value?: string | string[];
-  renderValue?: (val: SelectProps['value']) => string;
+  value: T;
+  renderValue: (val: T) => string;
   variant?: SelectVariant;
   dimension?: SelectDimension;
   children: ReactElement[];
   className?: string;
-  onChange?: (e: SelectChangeEvent) => void;
+  onChange?: (e: SelectChangeEvent<T>) => void;
 }
 
-const Select = forwardRef<HTMLInputElement, SelectProps>((props, ref) => {
+const Select = <T,>(props: SelectProps<T>) => {
   const {
-    multiple = false,
-    value = '',
+    ref,
+    fullWidth = true,
+    value,
     renderValue,
     children,
     className,
@@ -39,6 +48,8 @@ const Select = forwardRef<HTMLInputElement, SelectProps>((props, ref) => {
     onChange,
     ...rest
   } = props;
+
+  const multiple = Array.isArray(value);
 
   // HOOKS
   const divRef = useRef<HTMLDivElement>(null);
@@ -52,8 +63,7 @@ const Select = forwardRef<HTMLInputElement, SelectProps>((props, ref) => {
 
       let newValue: string | string[];
 
-      if (multiple && Array.isArray(value)) {
-        console.log(value);
+      if (multiple) {
         newValue = value.slice() || [];
         const itemIndex = value.indexOf(child.props.value);
 
@@ -78,7 +88,7 @@ const Select = forwardRef<HTMLInputElement, SelectProps>((props, ref) => {
           const clonedEvent = new Event(
             nativeEvent.type,
             nativeEvent
-          ) as SelectChangeEvent;
+          ) as SelectChangeEvent<T>;
 
           Object.defineProperty(clonedEvent, 'target', {
             writable: true,
@@ -92,24 +102,18 @@ const Select = forwardRef<HTMLInputElement, SelectProps>((props, ref) => {
       }
     };
   };
-  // STYLES
-  const selectVariantStyles = selectVariant[variant].general;
-  const selectDimensionStyles = selectDimension[dimension];
-  const selectStyles = classNames(
-    selectDefaultStyles,
-    selectVariantStyles,
-    selectDimensionStyles,
-    className
-  );
 
   return (
     <div ref={divRef} className="relative" onClick={onOpen}>
-      <input
+      <Input
         ref={ref}
-        className={selectStyles}
-        value={renderValue ? renderValue(value) : value}
-        {...rest}
+        fullWidth={fullWidth}
+        variant={variant}
+        dimension={dimension}
+        value={renderValue ? renderValue(value) : (value as string)}
         readOnly
+        className={className}
+        {...rest}
       />
       <Iconify
         width={20}
@@ -144,6 +148,6 @@ const Select = forwardRef<HTMLInputElement, SelectProps>((props, ref) => {
       </Modal>
     </div>
   );
-});
+};
 
 export default Select;

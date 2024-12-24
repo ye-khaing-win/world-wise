@@ -4,72 +4,71 @@ import {
   forwardRef,
   MouseEvent,
   ReactElement,
+  // ReactNode,
   useRef,
-  useState,
 } from 'react';
 import Iconify from '../Iconify';
 import classNames from 'classnames';
 import Modal from '../ui/Modal/Modal';
 import Menu from '../ui/Menu/Menu';
 import { MenuItemProps } from '../ui/Menu/MenuItem';
+import useMenuRender from '../../hooks/useMenuRender';
+import Input from './Input';
 
-export type SelectChangeEvent<T = string> =
-  | (Event & { target: { value: T } })
-  | React.ChangeEvent<HTMLInputElement>;
+export type SelectChangeEvent = Event & {
+  target: { value: string | string[] };
+};
+// | React.ChangeEvent<HTMLInputElement>;
 
 type SelectVariant = 'outlined';
 type SelectDimension = 'default';
 
 interface SelectProps {
+  fullWidth?: boolean;
   value?: string | string[];
-  renderValue?: (val?: string | string[]) => string | undefined;
+  renderValue?: (val: string[]) => string;
   variant?: SelectVariant;
   dimension?: SelectDimension;
-  multiple?: boolean;
   children: ReactElement[];
   className?: string;
   onChange?: (e: SelectChangeEvent) => void;
 }
 
-const defaultRenderValue = (val: string | string[]) => {
+const defaultRenderValue = (val: SelectProps['value']) => {
   if (!val) return '';
+  if (Array.isArray(val)) return val.join(', ');
 
-  return Array.isArray(val) ? val.join(', ') : val;
+  return val;
 };
 
 const Select = forwardRef<HTMLInputElement, SelectProps>((props, ref) => {
   const {
+    fullWidth = true,
     value = '',
     renderValue = defaultRenderValue,
     children,
     className,
     variant = 'outlined',
     dimension = 'default',
-    multiple = false,
     onChange,
     ...rest
   } = props;
 
+  const multiple = Array.isArray(value);
+
   // HOOKS
   const divRef = useRef<HTMLDivElement>(null);
-  const [open, setOpen] = useState<boolean>(false);
-  const [domRect, setDomRect] = useState<DOMRect | null>(null);
 
-  // HANDLERS
-  const handleOpen = () => {
-    setDomRect(divRef?.current && divRef.current.getBoundingClientRect());
-
-    setOpen(true);
-  };
+  const { domRect, open, onOpen, onClose } =
+    useMenuRender<HTMLDivElement>(divRef);
 
   const handleSelect = (child: ReactElement) => {
     return (e: MouseEvent<HTMLLIElement>) => {
       e.stopPropagation();
 
-      let newValue: string | string[];
+      let newValue: SelectProps['value'];
 
-      if (multiple && Array.isArray(value)) {
-        console.log(value);
+      if (multiple) {
         newValue = value.slice() || [];
         const itemIndex = value.indexOf(child.props.value);
 
@@ -80,7 +79,7 @@ const Select = forwardRef<HTMLInputElement, SelectProps>((props, ref) => {
         }
       } else {
         newValue = child.props.value;
-        setOpen(false);
+        onClose();
       }
 
       if (child.props.onClick) {
@@ -109,53 +108,17 @@ const Select = forwardRef<HTMLInputElement, SelectProps>((props, ref) => {
     };
   };
 
-  // STYLES
-  // Variant
-  const selectVariant: {
-    [key in SelectVariant]: {
-      general: string;
-      validation: string;
-    };
-  } = {
-    outlined: {
-      general: classNames(
-        'outline outline-1 outline-grey-500/20',
-        'group-focus-within/field-wrap:outline-2 group-focus-within/field-wrap:outline-grey-800'
-      ),
-      validation: classNames(),
-    },
-  };
-
-  const selectVariantStyles = selectVariant[variant].general;
-
-  // Dimension
-  const selectDimension: {
-    [key in SelectDimension]: string;
-  } = {
-    default: classNames('h-14', 'p-4 pr-8', 'text-sm'),
-  };
-
-  const selectDimensionStyles = selectDimension[dimension];
-
-  // Styles
-  const selectStyles = classNames(
-    'cursor-pointer',
-    'border-none',
-    'rounded-lg',
-    'text-grey-800',
-    selectVariantStyles,
-    selectDimensionStyles,
-    className
-  );
-
   return (
-    <div ref={divRef} className="relative" onClick={handleOpen}>
-      <input
+    <div ref={divRef} className="relative" onClick={onOpen}>
+      <Input
         ref={ref}
-        className={selectStyles}
-        value={renderValue?.(value) || ''}
-        {...rest}
+        fullWidth={fullWidth}
+        variant={variant}
+        dimension={dimension}
+        value={typeof value === 'string' ? value : renderValue(value)}
         readOnly
+        className={className}
+        {...rest}
       />
       <Iconify
         width={20}
@@ -165,7 +128,7 @@ const Select = forwardRef<HTMLInputElement, SelectProps>((props, ref) => {
           '-translate-y-1/2'
         )}
       />
-      <Modal invisible open={open} onClose={() => setOpen(false)}>
+      <Modal invisible open={open} onClose={onClose}>
         <Menu
           style={{
             top: domRect?.top ? domRect.top + 61 : 0,

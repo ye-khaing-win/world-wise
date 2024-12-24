@@ -13,13 +13,14 @@ import { TColor } from '../../../types/color';
 import Input from '../../../components/form/Input';
 import FieldWrap from '../../../components/form/FieldWrap';
 import Label from '../../../components/form/Label';
-import Select, { SelectChangeEvent } from '../../../components/form/Select_';
+// import Select, { SelectChangeEvent } from '../../../components/form/Select_';
 import MenuItem from '../../../components/ui/Menu/MenuItem';
 import Checkbox from '../../../components/form/Checkbox';
 import { useState } from 'react';
-import SelectTest from '../../../components/form/Select';
+import SelectTest, { SelectChangeEvent } from '../../../components/form/Select';
+import capitalize from '../../../utils/capitalize';
 
-const roles_ = [
+const dummyRoles = [
   {
     label: 'Admin',
     value: 'admin',
@@ -43,6 +44,21 @@ const roles_ = [
   {
     label: 'Project Manager',
     value: 'product_manager',
+  },
+];
+
+const dummyCountries = [
+  {
+    label: 'Myanmar',
+    value: 'myanmar',
+  },
+  {
+    label: 'China',
+    value: 'china',
+  },
+  {
+    label: 'Malaysia',
+    value: 'malaysia',
   },
 ];
 
@@ -86,52 +102,19 @@ const TABS: TTab[] = [
   },
 ];
 
-const countries = [
-  {
-    label: 'Myanmar',
-    value: 'myanmar',
-  },
-  {
-    label: 'China',
-    value: 'china',
-  },
-  {
-    label: 'Malaysia',
-    value: 'malaysia',
-  },
-];
-
 const UsersListPage = () => {
-  const [roles, setRoles] = useState<
-    {
-      label: string;
-      value: string;
-    }[]
-  >([]);
+  const [roles, setRoles] = useState<string[]>([]);
+  const [country, setCountry] = useState<string>('');
 
-  const [country, setCountry] = useState<{
-    label: string;
-    value: string;
-  } | null>(null);
-
-  const handleSelectCountry = (e: SelectChangeEvent) => {
+  const handleSelectCountry = (e: SelectChangeEvent<string>) => {
     const value = e.target.value;
-
-    setCountry(countries.find((c) => c.value === value)!);
+    setCountry(value as string);
   };
 
   const handleSelectRoles = (e: SelectChangeEvent<string[]>) => {
     const value = e.target.value;
 
-    // if (!value) return;
-    if (!Array.isArray(value)) return;
-
-    setRoles(value.map((val) => roles_.find((role) => role.value === val)!));
-
-    // setRoles(typeof value === 'string' ? value.split(',') : value);
-    // setRoles(typeof value === 'string' ? value.split(',') : value);
-
-    // console.log(roles)
+    setRoles(value);
   };
 
   return (
@@ -175,15 +158,21 @@ const UsersListPage = () => {
             <FieldWrap>
               <Label variant="shrink">Role</Label>
               <SelectTest
-                multiple
-                value={roles.map((r) => r.value)}
+                value={roles}
                 onChange={handleSelectRoles}
+                renderValue={(values) =>
+                  values
+                    .map((val) => {
+                      return dummyRoles.find((dr) => dr.value === val)?.label;
+                    })
+                    .join(', ')
+                }
               >
-                {roles_.map((role) => (
+                {dummyRoles.map((role) => (
                   <MenuItem key={role.value} value={role.value}>
                     <Checkbox
                       id={role.value}
-                      checked={roles.map((r) => r.value).includes(role.value)}
+                      checked={roles.includes(role.value)}
                     />
                     {role.label}
                   </MenuItem>
@@ -193,8 +182,12 @@ const UsersListPage = () => {
 
             <FieldWrap>
               <Label variant="shrink">City</Label>
-              <SelectTest value={country?.value} onChange={handleSelectCountry}>
-                {countries.map((country) => (
+              <SelectTest
+                value={country}
+                onChange={handleSelectCountry}
+                renderValue={(val) => capitalize(val)}
+              >
+                {dummyCountries.map((country) => (
                   <MenuItem key={country.value} value={country.value}>
                     {country.label}
                   </MenuItem>
