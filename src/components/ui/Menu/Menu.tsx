@@ -1,24 +1,24 @@
 import classNames from 'classnames';
-import { FC, HTMLAttributes, ReactNode } from 'react';
+import { forwardRef, HTMLAttributes, ReactNode } from 'react';
 
 interface MenuProps extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
   className?: string;
 }
 
-const Menu: FC<MenuProps> = (props) => {
+const Menu = forwardRef<HTMLDivElement, MenuProps>((props, ref) => {
   const { children, className, ...rest } = props;
 
   return (
     <div
-      tabIndex={-1}
+      ref={ref}
       className={classNames(
         'absolute',
+        'paper',
         'p-1',
         'shadow-menu',
-        'min-h-4 max-h-60',
         'rounded-lg',
-        'bg-white',
+        'min-h-4 max-h-60',
         className
       )}
       {...rest}
@@ -28,6 +28,6 @@ const Menu: FC<MenuProps> = (props) => {
       </ul>
     </div>
   );
-};
+});
 
 export default Menu;

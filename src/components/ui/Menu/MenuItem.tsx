@@ -24,9 +24,10 @@ const MenuItem: FC<MenuItemProps> = (props) => {
         'hover:bg-grey-500/10',
         'text-sm',
         'flex items-center',
+        '[&>svg]:mr-4',
         {
           'bg-grey-500/20 font-semibold': selected,
-          'bg-white': !selected,
+          'bg-transparent': !selected,
         },
         className
       )}

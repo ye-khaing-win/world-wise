@@ -22,6 +22,7 @@ import InputWrap from '../../../components/form/InputWrap';
 import IconButton from '../../../components/ui/IconButton';
 import usePopover from '../../../components/ui/Popover/usePopover';
 import Popover from '../../../components/ui/Popover/Popover';
+import Table from '../../../components/ui/Table/Table';
 
 const dummyRoles = [
   {
@@ -177,11 +178,27 @@ const UsersListPage = () => {
           </div>
           <Popover
             open={Boolean(popover.anchorEl)}
-            anchorEl={popover.anchorEl!}
+            anchorEl={popover.anchorEl}
+            anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+            transformOrigin={{ vertical: 'top', horizontal: 'right' }}
             onClose={popover.onClose}
+            className="w-[140px]"
           >
-            <MenuItem>A</MenuItem>
+            <MenuItem>
+              <Iconify icon="solar:printer-minimalistic-bold" /> Print PDF
+            </MenuItem>
+            <MenuItem>
+              <Iconify icon="solar:import-bold" /> Import
+            </MenuItem>
+            <MenuItem>
+              <Iconify icon="solar:export-bold" /> Export
+            </MenuItem>
           </Popover>
+
+          {/* TABLE */}
+          <div className="relative">
+            <Table></Table>
+          </div>
 
           <div className="h-[20rem]" />
         </Card>

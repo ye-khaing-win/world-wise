@@ -9,11 +9,14 @@ export default {
       container: {
         center: true,
         screens: {
-          sm: '640px',
-          md: '768px',
-          lg: '1024px',
-          xl: '1280px',
+          sm: '600px',
+          md: '900px',
+          lg: '1200px',
+          // xl: '1536px',
         },
+      },
+      backgroundImage: {
+        paper: "url('/assets/cyan-blur.png'), url('/assets/red-blur.png')",
       },
       colors: {
         grey: {

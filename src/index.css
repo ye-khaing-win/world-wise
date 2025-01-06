@@ -13,3 +13,10 @@
     scrollbar-width: none; /* Firefox */
   }
 }
+
+@layer components {
+  .paper {
+    @apply bg-paper bg-no-repeat [background-position:top_right,left_bottom] [background-size:50%,50%];
+    @apply backdrop-blur-lg opacity-90 bg-white;
+  }
+}
