@@ -1,8 +1,10 @@
 import {
   Children,
   cloneElement,
+  forwardRef,
   MouseEvent,
   ReactElement,
+  Ref,
   RefObject,
   // ReactNode,
   useRef,
@@ -36,9 +38,8 @@ interface SelectProps<T> {
   onChange?: (e: SelectChangeEvent<T>) => void;
 }
 
-const Select = <T,>(props: SelectProps<T>) => {
+function SelectBase<T>(props: SelectProps<T>, ref: Ref<HTMLInputElement>) {
   const {
-    ref,
     fullWidth = true,
     value,
     renderValue,
@@ -152,6 +153,10 @@ const Select = <T,>(props: SelectProps<T>) => {
       </Modal>
     </div>
   );
-};
+}
+
+const Select = forwardRef(SelectBase) as <T>(
+  props: SelectProps<T> & { ref?: Ref<HTMLInputElement> }
+) => ReactElement;
 
 export default Select;

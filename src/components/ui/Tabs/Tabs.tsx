@@ -20,7 +20,10 @@ const Tabs: FC<TabsProps> = (props) => {
   const { tabIndex, left, width, onSwitch, setItemRef } = useTabs();
 
   return (
-    <div className={classNames('w-full', 'px-5', 'shadow-tabs', className)} {...rest}>
+    <div
+      className={classNames('w-full', 'px-5', 'shadow-tabs', className)}
+      {...rest}
+    >
       <div className="relative">
         <ul className={classNames('flex list-none flex-wrap', 'rounded-md')}>
           {Children.map(children, (child, i) => (
@@ -42,7 +45,7 @@ const Tabs: FC<TabsProps> = (props) => {
           className={classNames(
             'absolute',
             'h-0.5 bg-grey-800',
-            'bottom-0 z-10',
+            'bottom-0 z-[100]',
             'transition-all duration-200 ease-in'
           )}
           style={{
